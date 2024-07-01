@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-
+import { HiPlus} from "react-icons/hi";
+import { useNavigate } from 'react-router-dom';
 function Category() {
   const [categories, setCategories] = useState([]);
   const [newCategoryName, setNewCategoryName] = useState('');
   const [editedCategoryId, setEditedCategoryId] = useState(null);
   const [editedCategoryName, setEditedCategoryName] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,7 +27,7 @@ function Category() {
       }
     };
     fetchData();
-  }, []);
+  }, [],2000);
 
   const handleCreateCategory = async () => {
     try {
@@ -84,6 +86,7 @@ function Category() {
   return (
     <div className="max-w-md mx-auto p-4 pt-6 md:p-6 lg:p-12 bg-white rounded shadow-md">
       <h1 className="text-3xl font-bold mb-4">Categories</h1>
+      <h4 className='text-xl font-semibold pb-1'>create expenses in categories</h4>
       <ul className="list-none mb-4">
         {
         
@@ -91,6 +94,9 @@ function Category() {
           <li key={category.id} className="flex justify-between mb-2">
             <span className="text-lg">{category.name}</span>
             <div className="flex">
+            <button  className="px-3 py-3 hover:bg-gray-300"onClick={() => navigate("/expenses")}>
+                <HiPlus />
+              </button>
               <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setEditedCategoryId(category.id)}>Edit</button>
               <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2" onClick={() => handleDeleteCategory(category.id)}>Delete</button>
             </div>

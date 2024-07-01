@@ -44,10 +44,13 @@ expenseRouter.use("/*",async (c,next)=>{
       })
     }
     const expense = await prisma.expense.create({
-      data: { balance: body.balance, 
+      data: 
+      {
+        balance: body.balance, 
         description: body.description,
         userId: userId, 
-        categoryId: body.categoryId }
+        categoryId: body.categoryId
+      }
     });
   
     const user = await prisma.user.findUnique(
@@ -108,17 +111,18 @@ expenseRouter.use("/*",async (c,next)=>{
     const oldExpense = await prisma.expense.findUnique({
        where: {
          id: Number(id) 
-        } 
+        }
       });
     const userId = c.get("userId");
-  
+
     if (oldExpense) {
       const expense = await prisma.expense.update({
         where: { id: Number(id) },
         data: { balance: body.balance,
           description: body.description, 
           userId: userId,
-          categoryId: body.categoryId }
+          categoryId: body.categoryId
+        }
       });
 
       const amountDifference = body.balance - oldExpense.balance;

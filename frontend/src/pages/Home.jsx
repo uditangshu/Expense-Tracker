@@ -101,7 +101,7 @@ function Home() {
               {expenses.map((expense, index) => (
                 <div key={index} className="bg-white shadow-md rounded p-4">
                   <h3 className="text-lg font-bold">{expense.category}</h3>
-                  <p className="text-lg font-bold text-green-600">${expense.amount.toLocaleString()}</p>
+                  <p className="text-lg font-bold text-red-600">${expense.amount.toLocaleString()}</p>
                 </div>
               ))}
             </div>
@@ -109,10 +109,10 @@ function Home() {
             <p className="text-gray-700 text-lg mb-4 ">No expenses yet!</p>
           )}
           <Link
-            className="block text-blue-400 hover:text-blue-600 transition duration-300 ease-in-out p-4"
-            to="/expenses"
+            className="block text-blue-400 hover:text-blue-600 hover:bg-gray-200"
+          to="/category"
           >
-            View Expenses
+            View and create categories
           </Link>
         </div>
       </div>

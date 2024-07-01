@@ -8,6 +8,8 @@ function Signup() {
   const [balance, setBalance] = useState(0);
   const [income, setIncome] = useState(0);
   const navigate = useNavigate();
+
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const userData = { username, email, password, balance,income };
@@ -19,14 +21,22 @@ function Signup() {
         },
         body: JSON.stringify(userData),
       });
+
       const data = await response.json();
-      if (response.ok) {
+      
+      if (response.ok)
+        {
         localStorage.setItem('jwtToken', data.token);
-        navigate('/signin', { replace: true });
+        navigate('/signin',
+           { replace: true
+
+          });
       } else {
         const error = await response.json();
         if (error.error === 'User already exists') {
-          navigate('/signin', { replace: true });
+          navigate('/signin', {
+             replace: true
+             });
         } else {
           console.error('Error signing up:', error);
         }
@@ -35,6 +45,8 @@ function Signup() {
       console.error('Error signing up:', e);
     }
   };
+
+
   return (
     <div className="container mx-auto p-4 pt-6 md:p-6 lg:p-12">
       <div className="flex mb-4">

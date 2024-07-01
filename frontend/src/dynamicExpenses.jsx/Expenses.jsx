@@ -12,7 +12,7 @@ export function Expenses() {
 
   const fetchExpenses = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:8787/api/v1/expenses/all-expenses`,{
+      const response = await fetch(`https://backend.server-uditangshu-2004.workers.dev/api/v1/expenses/all-expenses`,{
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -31,7 +31,7 @@ export function Expenses() {
     event.preventDefault();
     try {
       setIsLoading(true);
-      const response = await fetch(`http://127.0.0.1:8787/api/v1/expenses`, {
+      const response = await fetch(`https://backend.server-uditangshu-2004.workers.dev/api/v1/expenses`, {
         method: 'POST',
         headers: {
              'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ export function Expenses() {
   const handleUpdateExpense = async (id, updatedExpense) => {
     try {
       setIsLoading(true);
-      const response = await fetch(`http://127.0.0.1:8787/api/v1/expenses/${id}`, {
+      const response = await fetch(`https://backend.server-uditangshu-2004.workers.dev/api/v1/expenses/${id}`, {
         method: 'PUT',
         headers: { 
             'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ export function Expenses() {
   const handleDeleteExpense = async (id) => {
     try {
       setIsLoading(true);
-      await fetch(`http://127.0.0.1:8787/api/v1/expenses/${id}`, { method: 'DELETE' });
+      await fetch(`https://backend.server-uditangshu-2004.workers.dev/api/v1/expenses/${id}`, { method: 'DELETE' });
       setExpenses(expenses.filter((expense) => expense.id !== id));
     } catch (error) {
       setError(error.message);
@@ -85,8 +85,6 @@ export function Expenses() {
 return (
     <div>
         <h1>Expenses</h1>
-        {error && <p>Error: {error}</p>}
-        {isLoading && <p>Loading...</p>}
         <form onSubmit={handleCreateExpense}>
         <label>Category:</label>
         <input
@@ -99,7 +97,7 @@ return (
         <label>Amount:</label>
         <input
             type="number"
-            value={newExpense.amount || 0}
+            value={newExpense.amount}
             onChange={(event) => setNewExpense({...newExpense, amount: event.target.valueAsNumber })}
             required
         />
