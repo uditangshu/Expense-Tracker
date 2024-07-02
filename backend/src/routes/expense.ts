@@ -31,43 +31,68 @@ expenseRouter.use("/*",async (c,next)=>{
         await next();
 })
 
-  expenseRouter.post('/', async (c) => {
-    const body = await c.req.json();
-    const userId = c.get("userId");
+expenseRouter.post('/:id', async (c) => {
+  const categoryId = c.req.param("id");
+  const body = await c.req.json();
+  const userId = c.get("userId");
 
-    const prisma = new PrismaClient({
-      datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate())
-    if(body.categoryId === undefined){
-      return c.json({
-        message: "please create a category frist"
-      })
+  if (!categoryId) {
+    return c.json({
+      message: "please create a category first"
+    }, 400);
+  }
+
+  if (!body.balance ||!body.description) {
+    return c.json({
+      message: "balance and description are required"
+    }, 400);
+  }
+
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL,
+  }).$extends(withAccelerate())
+
+  const category = await prisma.category.findUnique({
+    where: {
+      id: Number(categoryId)
     }
-    const expense = await prisma.expense.create({
-      data: 
-      {
-        balance: body.balance, 
-        description: body.description,
-        userId: userId, 
-        categoryId: body.categoryId
-      }
-    });
-  
-    const user = await prisma.user.findUnique(
-      { 
-      where: 
-      { id: userId } 
-      });
-    if (!user) {
-      return c.json({ error: 'User not found' });
-    }
-    const newBalance = user.balance - body.balance;
-    await prisma.user.update({
-      where: { id: userId },
-      data: { balance: newBalance },
-    });
-    return c.json(expense);
   });
+
+  if (!category) {
+    return c.json({
+      message: "category not found"
+    }, 404);
+  }
+
+  const expense = await prisma.expense.create({
+    data: {
+      balance: body.balance,
+      description: body.description,
+      userId: userId,
+      categoryId: Number(categoryId)
+    }
+  });
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId
+    }
+  });
+
+  if (!user) {
+    return c.json({ error: 'User not found' }, 404);
+  }
+
+  const newBalance = user.balance - body.balance;
+  await prisma.user.update({
+    where: { id: userId },
+    data: { 
+      balance: newBalance 
+     },
+  });
+
+  return c.json(expense);
+});
    
   expenseRouter.get('/all-expenses', async (c) => {
     const prisma = new PrismaClient({
@@ -86,11 +111,11 @@ expenseRouter.use("/*",async (c,next)=>{
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate())
     const userId = c.get("userId");
-    const expense = await prisma.expense.findUnique({
-       where: 
+    const expense = await prisma.expense.findMany({
+      where: 
       { 
         userId: userId,
-        id: Number(id)
+        categoryId: Number(id)
       } 
     });
 
@@ -149,33 +174,43 @@ expenseRouter.use("/*",async (c,next)=>{
   
   expenseRouter.delete('/:id', async (c) => {
     const id = c.req.param("id");
-    const body = await c.req.json();
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate())
-    const expense = await prisma.expense.findUnique({ where: { id: Number(id) } });
+    const expense = await prisma.expense.findUnique({ 
+      where:
+      { 
+        id: Number(id) 
+      } 
+    });
   
     if (expense) {
       const userId = c.get("userId");
       const user = await prisma.user.findUnique(
         { 
-        where: 
-        { id: userId } 
-        });
+        where:
+        { 
+          id: userId
+        } 
+      });
       if (!user) {
         return c.json({ error: 'User not found' });
       }
-      const newBalance = user.balance - body.balance;
+      const newBalance = user.balance + expense.balance;
       await prisma.user.update({
         where: { id: userId },
         data: { balance: newBalance },
       });
+
+      await prisma.expense.delete({
+        where: {
+          id: Number(id)
+        }
+      });
        // Add the expense amount.... back to the user's balance....(testing with whole body and function inside this time)
-      return c.json({ message: 'Expense deleted' } && user.balance);
+      return c.json(c.req.json);
     } 
     else {
       return c.notFound();
     }
   });
-  
- 
