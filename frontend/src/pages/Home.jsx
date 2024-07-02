@@ -130,7 +130,7 @@ function Home() {
       <div className='pt-4 grid grid-cols-1 md:grid-cols-2 gap-1'>
       { Array.isArray(expenses) && expenses.length > 0 ? (
         <div className="grid grid-cols-1 gap-4 shadow-lg ">
-           <h1 className='text-2xl font-semibold py-4 flex justify-center'>Recent transactions</h1>
+           <h1 className='text-2xl font-semibold py-4 flex justify-center shadow-md'>Recent transactions</h1>
           {expenses.slice(-5).map((expense, index) => (
             <div key={index} className="bg-white shadow-md rounded p-4">
               <h3 className="text-lg font-bold">{expense.description}</h3>
@@ -145,12 +145,11 @@ function Home() {
         </div>
       )}
       <div className=' col-span-1 h-svh bg-slate-500'>
-      <h1 className='text-2xl font-semibold py-4 flex justify-center bg-white'>Chart</h1>
-      <div className=''>hello</div>
+      <h1 className='text-2xl font-semibold py-4 flex justify-center bg-white shadow-md pb-7'>Chart</h1>
+      <div className='text-white '>Here we will have the expense chart</div>
       </div>
     </div > 
 </div>
-    
   );
 }
 
