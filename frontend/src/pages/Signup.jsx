@@ -94,6 +94,7 @@ function Signup() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              minLength={8}
             />
           </div>
           <div className="w-full md:w-1/2 px-3">

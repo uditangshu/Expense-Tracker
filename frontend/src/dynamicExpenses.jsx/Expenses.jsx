@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 export function Expenses() {
   const [expenses, setExpenses] = useState([]);
-  const [newExpense, setNewExpense] = useState({ category: '', amount: 0 });
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-
+  const [newExpense, setNewExpense] = useState({ balance: 0, description: ''});
+  const {catId} = useParams();
+  
   useEffect(() => {
     fetchExpenses();
   }, []);
 
-  const fetchExpenses = async () => {
+  const fetchExpenses = async (e) => {
+    // e.preventDefault();
     try {
       const response = await fetch(`https://backend.server-uditangshu-2004.workers.dev/api/v1/expenses/all-expenses`,{
         method: "GET",
@@ -26,32 +27,36 @@ export function Expenses() {
       console.log(e)
     }
   };
-
-  const handleCreateExpense = async (event) => {
-    event.preventDefault();
+  
+  const handleCreateExpense = async (e) => {
+    e.preventDefault();
+    console.log(newExpense.balance)
+    console.log(newExpense.description)
     try {
-      setIsLoading(true);
-      const response = await fetch(`https://backend.server-uditangshu-2004.workers.dev/api/v1/expenses`, {
+      const response = await fetch(`https://backend.server-uditangshu-2004.workers.dev/api/v1/expenses/${catId || undefined}`, {
         method: 'POST',
         headers: {
              'Content-Type': 'application/json',
              'Authorization': `${localStorage.getItem('jwtToken')}`
              },
-        body: JSON.stringify(newExpense),
+        body: JSON.stringify({
+        balance: parseFloat(newExpense.balance), 
+        description: newExpense.description}),
       });
+      
       const data = await response.json();
+      console.log(data.balance);
+      console.log(data.description)
       setExpenses([...expenses, data]);
-      setNewExpense({ category: '', amount: 0 });
+      setNewExpense({ balance: 0, description: '' });
     } catch (e) {
-      setError(e.message);
-    } finally {
-      setIsLoading(false);
+      console.log(e)
     }
   };
 
   const handleUpdateExpense = async (id, updatedExpense) => {
     try {
-      setIsLoading(true);
+     
       const response = await fetch(`https://backend.server-uditangshu-2004.workers.dev/api/v1/expenses/${id}`, {
         method: 'PUT',
         headers: { 
@@ -62,60 +67,69 @@ export function Expenses() {
       });
       const data = await response.json();
       setExpenses(expenses.map((expense) => expense.id === id ? data : expense));
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
+    } catch (e) {
+      console.log(e)
+    } 
   };
 
   const handleDeleteExpense = async (id) => {
     try {
-      setIsLoading(true);
-      await fetch(`https://backend.server-uditangshu-2004.workers.dev/api/v1/expenses/${id}`, { method: 'DELETE' });
+      await fetch(`https://backend.server-uditangshu-2004.workers.dev/api/v1/expenses/${id}`,{
+         method: 'DELETE',
+         headers: {
+            'Authorization': `${localStorage.getItem('jwtToken')}`
+         }
+        });
+        console.log()
       setExpenses(expenses.filter((expense) => expense.id !== id));
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
+    } catch (e)
+    {
+      console.log(e)
+    } 
   };
 
  
 return (
-    <div>
-        <h1>Expenses</h1>
-        <form onSubmit={handleCreateExpense}>
-        <label>Category:</label>
-        <input
-            type="text"
-            value={newExpense.category || ''}
-            onChange={(event) => setNewExpense({...newExpense, category: event.target.value })}
-            required
-        />
-        <br />
-        <label>Amount:</label>
-        <input
-            type="number"
-            value={newExpense.amount}
-            onChange={(event) => setNewExpense({...newExpense, amount: event.target.valueAsNumber })}
-            required
-        />
-        <br />
-        <button type="submit">Create Expense</button>
-        </form>
-        <ul>
-        {expenses.map((expense) => (
-            <li key={expense.id}>
-            <span>{expense.category || 'No category'}</span>
-            <span>${expense.amount }</span>
-            <button onClick={() => handleUpdateExpense(expense.id, { category: 'Updated Category', amount: 100 })}>
-                Update
-            </button>
-            <button onClick={() => handleDeleteExpense(expense.id)}>Delete</button>
-            </li>
-        ))}
-        </ul>
-    </div>
-    );
+  <div className="max-w-xl mx-auto p-4 bg-white rounded shadow-md">
+  <h1 className="text-3xl text-center mb-4">Expenses</h1>
+  <form onSubmit={handleCreateExpense} className="flex flex-col items-center">
+    <label className="block mb-2 ">Amount:</label>
+    <input
+      type="number"
+      value={newExpense.balance}
+      onChange={(e) => setNewExpense({...newExpense, balance: e.target.value })}
+      required
+      className="p-2 pl-10 text-sm text-gray-700 border-2 border-gray-400 rounded"
+    />
+    <label className="block mb-2">Description:</label>
+    <input
+      type="text"
+      value={newExpense.description}
+      onChange={(e) => setNewExpense({...newExpense, description: e.target.value })}
+      required
+      className="p-2 pl-10 text-sm text-gray-700 border-2 border-gray-400 rounded"
+    />
+    <br />
+    <button type="submit" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+      Create Expense
+    </button>
+  </form>
+  <ul className="list-none p-0 m-4">
+    {expenses.map((expense) => (
+      <li key={expense.id} className="p-4 border-b border-gray-200 mb-4">
+        <span className="mr-4">{expense.category || ''}</span>
+        <span className="mr-4">${expense.balance}</span>
+        <span className="mr-4">{expense.description}</span>
+        <button onClick={() => handleUpdateExpense(expense.id, { category: 'Updated Category', amount: 100 })} className="bg-blue-500 hover:bg-blue-700 text-white float-right font-bold py-2 px-4 rounded ">
+          Update
+        </button>
+        <button onClick={() => handleDeleteExpense(expense.id)} className="bg-red-500 hover:bg-red-700 float-right text-white font-bold py-2 px-4 rounded mr-2">
+          Delete
+        </button>
+      </li>
+    ))}
+  </ul>
+</div>
+)
 }
+   

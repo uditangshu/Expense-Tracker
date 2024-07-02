@@ -24,10 +24,10 @@ function Home() {
           }
         });
         const user = await response.json();
+        console.log(user)
         setIncome(user.income);
         setUsername(user.username);
         setBalance(user.balance);
-        setExpenses(user.expenses); 
       } catch (e) {
         console.error('Error fetching data:', e);
         navigate('/signin');
@@ -36,6 +36,30 @@ function Home() {
 
     fetchData();
   }, [navigate]);
+
+  useEffect(() => {
+    fetchExpenses();
+  }, []);
+
+  const fetchExpenses = async (e) => {
+    // e.preventDefault();
+    try {
+      const response = await fetch(`http://127.0.0.1:8787/api/v1/expenses/all-expenses`,{
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': `${localStorage.getItem('jwtToken')}`
+            }
+        });
+    
+      const data = await response.json();
+      setExpenses(data);
+    } catch (e) {
+      console.log(e)
+    }
+  };
+  
+
 
   const handleLogout = () => {
     localStorage.removeItem('jwtToken');
@@ -96,18 +120,18 @@ function Home() {
         </div>
         <h2 className="text-2xl font-bold ">Expenses</h2>
         <div className="max-w-md mx-auto pt-6  md:pt-12">
-          {expenses > 0 ? (
+          {/* {expenses > 0 ? (
             <div className="grid grid-cols-1 gap-4">
               {expenses.map((expense, index) => (
                 <div key={index} className="bg-white shadow-md rounded p-4">
-                  <h3 className="text-lg font-bold">{expense.category}</h3>
-                  <p className="text-lg font-bold text-red-600">${expense.amount.toLocaleString()}</p>
+                  <h3 className="text-lg font-bold">{expense.description}</h3>
+                  <p className="text-lg font-bold text-red-600">${expense.balance.toLocaleString()}</p>
                 </div>
               ))}
             </div>
           ) : (
             <p className="text-gray-700 text-lg mb-4 ">No expenses yet!</p>
-          )}
+          )} */}
           <Link
             className="block text-blue-400 hover:text-blue-600 hover:bg-gray-200"
           to="/category"

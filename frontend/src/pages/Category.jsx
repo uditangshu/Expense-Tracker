@@ -42,8 +42,8 @@ function Category() {
       const data = await response.json();
       setCategories([...categories, data]);
       setNewCategoryName('');
-    } catch (error) {
-      console.error(error);
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -61,8 +61,8 @@ function Category() {
       setCategories(categories.map(category => category.id === id? data : category));
       setEditedCategoryId(null);
       setEditedCategoryName('');
-    } catch (error) {
-      console.error(error);
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -77,8 +77,8 @@ function Category() {
           }
          });
       setCategories(categories.filter(category => category.id!== id));
-    } catch (error) {
-      console.error(error);
+    } catch (e) {
+      console.log(e);
     }
     
   };
@@ -94,7 +94,7 @@ function Category() {
           <li key={category.id} className="flex justify-between mb-2">
             <span className="text-lg">{category.name}</span>
             <div className="flex">
-            <button  className="px-3 py-3 hover:bg-gray-300"onClick={() => navigate("/expenses")}>
+            <button  className="px-3 py-3 hover:bg-gray-300"onClick={() => navigate(`/expenses/${category.id}`)}>
                 <HiPlus />
               </button>
               <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setEditedCategoryId(category.id)}>Edit</button>
