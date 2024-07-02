@@ -82,7 +82,8 @@ export function Expenses() {
         });
         console.log()
       setExpenses(expenses.filter((expense) => expense.id !== id));
-    } catch (e)
+    } 
+    catch (e)
     {
       console.log(e)
     } 

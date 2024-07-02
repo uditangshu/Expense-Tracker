@@ -24,7 +24,7 @@ function Home() {
           }
         });
         const user = await response.json();
-        console.log(user)
+        // console.log(user)
         setIncome(user.income);
         setUsername(user.username);
         setBalance(user.balance);
@@ -91,8 +91,8 @@ function Home() {
 
 
   return (
-    <div className="container mx-auto p-4 pt-6 md:p-4 lg:p-4">
-      <header className="flex justify-between mb-4">
+    <div className="container mx-auto p-4 pt-6 md:p-4 lg:p-4 w-screen">
+      <header className="flex justify-between mb-4 ">
         <div className="flex items-center">
           <h1 className="text-3xl font-bold">MyPaisa</h1>
           <span className="text-lg font-bold ml-4">{username}</span>
@@ -106,7 +106,7 @@ function Home() {
             )}
             </div>
       </header>
-      <div className="p-4 max-w-md mx-auto bg-white shadow-md">
+      <div className="p-4 max-w-md mx-auto mt-4 bg-white shadow-md">
         <h1 className="text-3xl font-bold mb-4 text-center">Dashboard</h1>
         <div className="flex justify-between">
           <div>
@@ -118,29 +118,39 @@ function Home() {
             <p className="text-gray-700">${balance}</p>
           </div>
         </div>
-        <h2 className="text-2xl font-bold ">Expenses</h2>
-        <div className="max-w-md mx-auto pt-6  md:pt-12">
-          {/* {expenses > 0 ? (
-            <div className="grid grid-cols-1 gap-4">
-              {expenses.map((expense, index) => (
-                <div key={index} className="bg-white shadow-md rounded p-4">
-                  <h3 className="text-lg font-bold">{expense.description}</h3>
-                  <p className="text-lg font-bold text-red-600">${expense.balance.toLocaleString()}</p>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-gray-700 text-lg mb-4 ">No expenses yet!</p>
-          )} */}
+        <div className="max-w-md mx-auto pt-2  md:pt-4">
           <Link
-            className="block text-blue-400 hover:text-blue-600 hover:bg-gray-200"
+            className="block text-blue-500 hover:text-blue-800 hover:bg-gray-100"
           to="/category"
           >
             View and create categories
           </Link>
         </div>
       </div>
-    </div>
+      <div className='pt-4 grid grid-cols-1 md:grid-cols-2 gap-1'>
+      { Array.isArray(expenses) && expenses.length > 0 ? (
+        <div className="grid grid-cols-1 gap-4 shadow-lg ">
+           <h1 className='text-2xl font-semibold py-4 flex justify-center'>Recent transactions</h1>
+          {expenses.slice(-5).map((expense, index) => (
+            <div key={index} className="bg-white shadow-md rounded p-4">
+              <h3 className="text-lg font-bold">{expense.description}</h3>
+              <p className="text-lg font-bold text-red-600">${expense.balance}</p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div>
+        <h1 className='text-2xl font-semibold py-4 flex justify-center'>Recent transactions</h1>
+        <p className="text-gray-700 text-lg mb-4 ">No expenses yet!</p>
+        </div>
+      )}
+      <div className=' col-span-1 h-svh bg-slate-500'>
+      <h1 className='text-2xl font-semibold py-4 flex justify-center bg-white'>Chart</h1>
+      <div className=''>hello</div>
+      </div>
+    </div > 
+</div>
+    
   );
 }
 
