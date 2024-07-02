@@ -102,7 +102,7 @@ return (
       required
       className="p-2 pl-10 text-sm text-gray-700 border-2 border-gray-400 rounded"
     />
-    <label className="block mb-2">Description:</label>
+    <label className="block mb-2">Title:</label>
     <input
       type="text"
       value={newExpense.description}

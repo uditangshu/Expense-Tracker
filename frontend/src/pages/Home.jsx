@@ -88,7 +88,9 @@ function Home() {
       console.error('Error updating data:', e);
     }
   };
-
+  const handleCreateClick = ()=>{
+    navigate("/category",{replace: true})
+  }
 
   return (
     <div className="container mx-auto p-4 pt-6 md:p-4 lg:p-4 w-screen">
@@ -123,7 +125,7 @@ function Home() {
             className="block text-blue-500 hover:text-blue-800 hover:bg-gray-100"
           to="/category"
           >
-            View and create categories
+            create categories and expenses
           </Link>
         </div>
       </div>
@@ -139,9 +141,12 @@ function Home() {
           ))}
         </div>
       ) : (
-        <div>
-        <h1 className='text-2xl font-semibold py-4 flex justify-center'>Recent transactions</h1>
-        <p className="text-gray-700 text-lg mb-4 ">No expenses yet!</p>
+        <div className='w-full'>
+          <h1 className='text-2xl font-semibold py-4 flex justify-center'>Recent transactions</h1>
+          <p className="text-gray-700 text-lg mb-4py-4 flex justify-center">No expenses yet!</p>
+            <div className='flex justify-center mt-4'>
+              <button onClick={handleCreateClick} className=" text-white bg-blue-500 hover:bg-blue-700 rounded p-2">Create one</button>
+            </div>
         </div>
       )}
       <div className=' col-span-1 h-svh bg-slate-500'>
