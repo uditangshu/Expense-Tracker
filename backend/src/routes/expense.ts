@@ -26,7 +26,7 @@ expenseRouter.use("/*",async (c,next)=>{
             error: 'Unauthorized'
         })
     }
-    
+
         c.set("userId",user.id)
         await next();
 })
@@ -98,8 +98,14 @@ expenseRouter.post('/:id', async (c) => {
     const prisma = new PrismaClient({
          datasourceUrl: c.env.DATABASE_URL,
        }).$extends(withAccelerate())
-  
-    const expense = await prisma.expense.findMany();
+    const userId = c.get("userId");
+
+    const expense = await prisma.expense.findMany({
+      where: 
+      { 
+        userId: userId
+      }
+    });
     return c.json(expense);
     
   });
@@ -111,6 +117,8 @@ expenseRouter.post('/:id', async (c) => {
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate())
     const userId = c.get("userId");
+
+
     const expense = await prisma.expense.findMany({
       where: 
       { 
