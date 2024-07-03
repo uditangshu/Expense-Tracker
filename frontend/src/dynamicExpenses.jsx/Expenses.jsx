@@ -45,8 +45,6 @@ export function Expenses() {
       });
       
       const data = await response.json();
-      console.log(data.balance);
-      console.log(data.description)
       setExpenses([...expenses, data]);
       setNewExpense({ balance: 0, description: '' });
     } catch (e) {
@@ -89,6 +87,7 @@ export function Expenses() {
     } 
   };
 
+  
  
 return (
   <div className="max-w-xl mx-auto p-4 bg-white rounded shadow-md">
@@ -129,6 +128,13 @@ return (
       </li>
     ))}
   </ul>
+  <div>{expenses.map((props)=>{
+    return(
+      <div>
+       {props.userId}
+      </div>
+    )
+  })}</div>
 </div>
 )
 }
