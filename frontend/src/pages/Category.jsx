@@ -82,11 +82,19 @@ function Category() {
     }
     
   };
+  const handleHomeClick=()=>{
+    navigate("/",{replace: true})
+  }
 
   return (
-    <div className="max-w-md mx-auto p-4 pt-6 md:p-6 lg:p-12 bg-white rounded shadow-md">
-      <h1 className="text-3xl font-bold mb-4">Categories</h1>
-      <h4 className='text-xl font-semibold pb-1'>create expenses in categories</h4>
+    <div className="max-w-md mx-auto p-4 pt-2 md:p-6 lg:p-12 bg-white rounded shadow-md">
+     <header>
+        <div className="flex justify-between">
+          <button onClick={handleHomeClick} className='text-3xl font-bold pb-4'>MyPaisa</button>
+        </div>
+     </header>
+      <h1 className="text-2xl font-bold mb-4">Categories</h1>
+      
       <ul className="list-none mb-4">
         {
         
@@ -106,7 +114,11 @@ function Category() {
       <form className="mb-4">
         <label className="block mb-2">
           Create new category:
-          <input type="text" value={newCategoryName} onChange={e => setNewCategoryName(e.target.value)} className="w-full p-2 pl-10 text-sm text-gray-700 border-2 border-blue-500 " />
+          <input type="text"
+           value={newCategoryName} 
+           onChange={e => setNewCategoryName(e.target.value)} 
+           className="w-full p-2 pl-10 text-sm text-gray-700 border-2 border-blue-500 "
+           required />
         </label>
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleCreateCategory}>Create</button>
       </form>

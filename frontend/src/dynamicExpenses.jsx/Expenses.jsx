@@ -116,15 +116,14 @@ return (
     </button>
   </form>
   <ul className="list-none p-0 m-4">
-    {expenses.map((expense) => (
-      <li key={expense.id} className="p-4 border-b border-gray-200 mb-4">
-        <span className="mr-4">{expense.category || ''}</span>
+    {expenses.filter(expenses => expenses.categoryId==catId).map((expense) => (
+      <li key={expense.id} className="p-4 mb-4">
         <span className="mr-4">${expense.balance}</span>
         <span className="mr-4">{expense.description}</span>
         <button onClick={() => handleUpdateExpense(expense.id, { category: 'Updated Category', amount: 100 })} className="bg-blue-500 hover:bg-blue-700 text-white float-right font-bold py-2 px-4 rounded ">
           Update
         </button>
-        <button onClick={() => handleDeleteExpense(expense.id)} className="bg-red-500 hover:bg-red-700 float-right text-white font-bold py-2 px-4 rounded mr-2">
+        <button onClick={() => handleDeleteExpense(expense.id)} className="bg-red-500 hover:bg-red-700 float-right text-white font-bold py-2 px-4 rounded mr-2 ">
           Delete
         </button>
       </li>
