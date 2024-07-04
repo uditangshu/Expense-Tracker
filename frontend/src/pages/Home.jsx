@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 import Edit from '../components/Edit';
 import {EditButton} from '../components/EditButton';
 import BarChart from '../components/Chart';
+import { DB_URL } from '../DB_URL';
+
+
 
 function Home() {
   const [username, setUsername] = useState('');
@@ -17,7 +20,7 @@ function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://backend.server-uditangshu-2004.workers.dev/api/v1/home', {
+        const response = await fetch(`${DB_URL}/api/v1/home`, {
           method: "GET",
           headers: {
             'Content-Type': 'application/json',
@@ -45,7 +48,7 @@ function Home() {
   const fetchExpenses = async (e) => {
     // e.preventDefault();
     try {
-      const response = await fetch(`https://backend.server-uditangshu-2004.workers.dev/api/v1/expenses/all-expenses`,{
+      const response = await fetch(`${DB_URL}/api/v1/expenses/all-expenses`,{
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -72,7 +75,7 @@ function Home() {
 
   const handleEditSubmit = async ({newUsername}) => {
     try {
-      const response = await fetch('https://backend.server-uditangshu-2004.workers.dev/api/v1/home', {
+      const response = await fetch(`${DB_URL}/api/v1/home`, {
         method: "PUT",
         headers: {
           'Content-Type': 'application/json',
@@ -92,13 +95,17 @@ function Home() {
   const handleCreateClick = ()=>{
     navigate("/category",{replace: true})
   }
-
+  const handleHomeClick=()=>{
+    navigate("/",{replace: true})
+  }
   return (
     <div className="container mx-auto p-4 pt-6 md:p-4 lg:p-4 w-screen">
       <header className="flex justify-between mb-4 ">
         <div className="flex items-center">
-          <h1 className="text-3xl font-bold">MyPaisa</h1>
-          <span className="text-lg font-bold ml-4">{username}</span>
+          <button onClick={handleHomeClick}className="text-3xl font-bold">MyPaisa
+            <div className='text-xl font-semibold'>{username}</div>
+          </button>
+          
         </div>
         <div className="flex items-center">
           <button className="bg-blue-500 hover:bg-blue-700 shadow-md text-white font-bold py-2 px-4 rounded" onClick={handleLogout}>Logout</button>
@@ -137,7 +144,7 @@ function Home() {
           {expenses.slice(-5).map((expense, index) => (
             <div key={index} className="bg-white shadow-md rounded p-4">
               <h3 className="text-lg font-bold">{expense.description}</h3>
-              <p className="text-lg font-bold">categoryId: {expense.categoryId}</p>
+              <p className="text-lg font-bold">category: {expense.category}</p>
               <p className="text-lg font-bold text-red-600">${expense.balance}</p>
             </div>
           ))}

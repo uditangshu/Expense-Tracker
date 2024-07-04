@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { HiPlus} from "react-icons/hi";
 import { useNavigate } from 'react-router-dom';
+import { DB_URL } from '../DB_URL';
 function Category() {
   const [categories, setCategories] = useState([]);
   const [newCategoryName, setNewCategoryName] = useState('');
@@ -11,7 +12,7 @@ function Category() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://backend.server-uditangshu-2004.workers.dev/api/v1/categories', {
+        const response = await fetch(`${DB_URL}/api/v1/categories`, {
           method: "GET",
           headers: {
             'Content-Type': 'application/json',
@@ -31,7 +32,7 @@ function Category() {
 
   const handleCreateCategory = async () => {
     try {
-      const response = await fetch('https://backend.server-uditangshu-2004.workers.dev/api/v1/categories', {
+      const response = await fetch(`${DB_URL}/api/v1/categories`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -49,7 +50,7 @@ function Category() {
 
   const handleEditCategory = async (id) => {
     try {
-      const response = await fetch(`https://backend.server-uditangshu-2004.workers.dev/api/v1/categories/${id}`, {
+      const response = await fetch(`${DB_URL}/api/v1/categories/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -68,7 +69,7 @@ function Category() {
 
   const handleDeleteCategory = async (id) => {
     try {
-      await fetch(`https://backend.server-uditangshu-2004.workers.dev/api/v1/categories/${id}`,
+      await fetch(`${DB_URL}/api/v1/categories/${id}`,
          { 
           method: 'DELETE' ,
           headers: {
@@ -85,7 +86,7 @@ function Category() {
   const handleHomeClick=()=>{
     navigate("/",{replace: true})
   }
-
+  
   return (
     <div className="max-w-md mx-auto p-4 pt-2 md:p-6 lg:p-12 bg-white rounded shadow-md">
      <header>

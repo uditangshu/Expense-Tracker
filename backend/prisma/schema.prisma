@@ -22,6 +22,8 @@ model User {
   email      String    @unique
   createdAt  DateTime  @default(now())
   expenses   Expense[]
+
+
 }
 
 model Category {
@@ -36,7 +38,7 @@ model Expense {
   description String?
   date       DateTime  @default(now())
   userId    String
-  categoryId Int
+  category String
   user       User      @relation(fields: [userId], references: [id])
-  category   Category  @relation(fields: [categoryId], references: [id])
+  Category   Category  @relation(fields: [category], references: [name])
 }

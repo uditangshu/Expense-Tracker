@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { DB_URL } from '../DB_URL';
+
 
 export function Expenses() {
   const [expenses, setExpenses] = useState([]);
   const [newExpense, setNewExpense] = useState({ balance: 0, description: ''});
   const {catId} = useParams();
-  
+  const navigate = useNavigate();
   useEffect(() => {
     fetchExpenses();
   }, []);
@@ -13,7 +15,7 @@ export function Expenses() {
   const fetchExpenses = async (e) => {
     // e.preventDefault();
     try {
-      const response = await fetch(`https://backend.server-uditangshu-2004.workers.dev/api/v1/expenses/all-expenses`,{
+      const response = await fetch(`${DB_URL}/api/v1/expenses/all-expenses`,{
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -33,7 +35,7 @@ export function Expenses() {
     console.log(newExpense.balance)
     console.log(newExpense.description)
     try {
-      const response = await fetch(`https://backend.server-uditangshu-2004.workers.dev/api/v1/expenses/${catId || undefined}`, {
+      const response = await fetch(`${DB_URL}/api/v1/expenses/${catId || undefined}`, {
         method: 'POST',
         headers: {
              'Content-Type': 'application/json',
@@ -55,7 +57,7 @@ export function Expenses() {
   const handleUpdateExpense = async (id, updatedExpense) => {
     try {
      
-      const response = await fetch(`https://backend.server-uditangshu-2004.workers.dev/api/v1/expenses/${id}`, {
+      const response = await fetch(`${DB_URL}/api/v1/expenses/${id}`, {
         method: 'PUT',
         headers: { 
             'Content-Type': 'application/json',
@@ -72,7 +74,7 @@ export function Expenses() {
 
   const handleDeleteExpense = async (id) => {
     try {
-      await fetch(`https://backend.server-uditangshu-2004.workers.dev/api/v1/expenses/${id}`,{
+      await fetch(`${DB_URL}/api/v1/expenses/${id}`,{
          method: 'DELETE',
          headers: {
             'Authorization': `${localStorage.getItem('jwtToken')}`
@@ -86,11 +88,18 @@ export function Expenses() {
       console.log(e)
     } 
   };
-
+  const handleHomeClick=()=>{
+    navigate("/",{replace: true})
+  }
   
  
 return (
   <div className="max-w-xl mx-auto p-4 bg-white rounded shadow-md">
+    <header>
+        <div className="flex justify-between">
+          <button onClick={handleHomeClick} className='text-3xl font-bold pb-4'>MyPaisa</button>
+        </div>
+     </header>
   <h1 className="text-3xl text-center mb-4">Expenses</h1>
   <form onSubmit={handleCreateExpense} className="flex flex-col items-center">
     <label className="block mb-2 ">Amount:</label>
@@ -106,6 +115,14 @@ return (
       type="text"
       value={newExpense.description}
       onChange={(e) => setNewExpense({...newExpense, description: e.target.value })}
+      required
+      className="p-2 pl-10 text-sm text-gray-700 border-2 border-gray-400 rounded"
+    />
+     <label className="block mb-2 ">category:</label>
+    <input
+      type="text"
+      value={newExpense.category}
+      // onChange={(e) => setNewExpense({...newExpense, balance: e.target.value })}
       required
       className="p-2 pl-10 text-sm text-gray-700 border-2 border-gray-400 rounded"
     />
@@ -128,13 +145,6 @@ return (
       </li>
     ))}
   </ul>
-  <div>{expenses.map((props)=>{
-    return(
-      <div>
-       {props.userId}
-      </div>
-    )
-  })}</div>
 </div>
 )
 }

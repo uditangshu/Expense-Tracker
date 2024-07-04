@@ -1,5 +1,6 @@
 import React, { useState} from 'react';
 import {useNavigate} from "react-router-dom"
+import { DB_URL } from '../DB_URL';
 
 function Signup() {
   const [username, setUsername] = useState('');
@@ -14,7 +15,7 @@ function Signup() {
     e.preventDefault();
     const userData = { username, email, password, balance,income };
     try {
-      const response = await fetch('https://backend.server-uditangshu-2004.workers.dev/api/v1/user/signup', {
+      const response = await fetch(`${DB_URL}/api/v1/user/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
