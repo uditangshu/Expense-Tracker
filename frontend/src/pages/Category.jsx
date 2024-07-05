@@ -103,7 +103,7 @@ function Category() {
           <li key={category.id} className="flex justify-between mb-2">
             <span className="text-lg">{category.name}</span>
             <div className="flex">
-            <button  className="px-3 py-3 hover:bg-gray-300"onClick={() => navigate(`/expenses/${category.id}`)}>
+            <button  className="px-3 py-3 hover:bg-gray-300"onClick={() => navigate(`/expenses/${category.name}`)}>
                 <HiPlus />
               </button>
               <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setEditedCategoryId(category.id)}>Edit</button>

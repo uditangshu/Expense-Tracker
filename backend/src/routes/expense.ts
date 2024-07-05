@@ -41,7 +41,6 @@ expenseRouter.post('/:id', async (c) => {
       message: "please create a category first"
     }, 400);
   }
-
   if (!body.balance ||!body.description) {
     return c.json({
       message: "balance and description are required"
@@ -54,7 +53,7 @@ expenseRouter.post('/:id', async (c) => {
 
   const category = await prisma.category.findUnique({
     where: {
-      id: Number(categoryId)
+      name: (categoryId)
     }
   });
 
@@ -69,7 +68,71 @@ expenseRouter.post('/:id', async (c) => {
       balance: body.balance,
       description: body.description,
       userId: userId,
-      categoryId: Number(categoryId)
+      category: (categoryId)
+    }
+  });
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId
+    }
+  });
+
+  if (!user) {
+    return c.json({ error: 'User not found' }, 404);
+  }
+
+  const newBalance = user.balance - body.balance;
+  await prisma.user.update({
+    where: { id: userId },
+    data: { 
+      balance: newBalance 
+     },
+  });
+
+  return c.json(expense);
+});
+
+expenseRouter.post('/', async (c) => {
+
+  const body = await c.req.json();
+  const userId = c.get("userId");
+
+  if (!body.category)
+    {
+    return c.json({
+      message: "please create a category first"
+    }, 400);
+  }
+
+  if (!body.balance ||!body.description) {
+    return c.json({
+      message: "balance and description are required"
+    }, 400);
+  }
+
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL,
+  }).$extends(withAccelerate())
+
+  const category = await prisma.category.findUnique({
+    where: {
+      name: body.category
+    }
+  });
+
+  if (!category) {
+    return c.json({
+      message: "category not found"
+    }, 404);
+  }
+
+  const expense = await prisma.expense.create({
+    data: {
+      balance: body.balance,
+      description: body.description,
+      userId: userId,
+      category: body.category
     }
   });
 
@@ -123,7 +186,7 @@ expenseRouter.post('/:id', async (c) => {
       where: 
       { 
         userId: userId,
-        categoryId: Number(id)
+        category: String(id)
       } 
     });
 
@@ -154,7 +217,51 @@ expenseRouter.post('/:id', async (c) => {
         data: { balance: body.balance,
           description: body.description, 
           userId: userId,
-          categoryId: body.categoryId
+          category: body.category
+        }
+      });
+
+      const amountDifference = body.balance - oldExpense.balance;
+
+      const user = await prisma.user.findUnique(
+        { 
+        where: 
+        { id: userId } 
+        });
+      if (!user) {
+        return c.json({ error: 'User not found' });
+      }
+      const newBalance = user.balance - amountDifference;
+      await prisma.user.update({
+        where: { id: userId },
+        data: { balance: newBalance },
+      });
+     
+      return c.json(expense);
+    } else {
+      return c.notFound();
+    }
+  });
+   expenseRouter.put('/:id', async (c) => {
+    const id = c.req.param("id");
+    const prisma = new PrismaClient({
+      datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate())
+    const body = await c.req.json();
+    const oldExpense = await prisma.expense.findUnique({
+       where: {
+         id: Number(id) 
+        }
+      });
+    const userId = c.get("userId");
+
+    if (oldExpense) {
+      const expense = await prisma.expense.update({
+        where: { id: Number(id) },
+        data: { balance: body.balance,
+          description: body.description, 
+          userId: userId,
+          category: body.category
         }
       });
 

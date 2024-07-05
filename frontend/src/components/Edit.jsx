@@ -11,11 +11,11 @@ const Edit = ({ onClose, onSubmit }) => {
 
   return (
     <div
-      className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-70 flex justify-center"
+      className="fixed top-0 left-0 w-full bg-gray-500 bg-opacity-70 flex items-center h-full"
       role="dialog"
       aria-modal="true"
     >
-      <div className="bg-white rounded shadow-md p-4 max-w-md mx-auto mt-20">
+      <div className="bg-white rounded shadow-md p-4 max-w-md mx-auto mt-20 ">
         <h2 className="text-lg font-bold mb-4">Edit Username</h2>
         <form onSubmit={handleSubmit}>
           <input

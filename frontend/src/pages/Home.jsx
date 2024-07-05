@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { Link } from 'react-router-dom';
 import Edit from '../components/Edit';
 import {EditButton} from '../components/EditButton';
 import BarChart from '../components/Chart';
 import { DB_URL } from '../DB_URL';
-
 
 
 function Home() {
@@ -110,7 +108,6 @@ function Home() {
         <div className="flex items-center">
           <button className="bg-blue-500 hover:bg-blue-700 shadow-md text-white font-bold py-2 px-4 rounded" onClick={handleLogout}>Logout</button>
           <EditButton onClick={handleEdit} />
-
             {showEditModal && (
           <Edit onClose={() => setShowEditModal(false)} onSubmit={handleEditSubmit} />
             )}
@@ -129,12 +126,18 @@ function Home() {
           </div>
         </div>
         <div className="max-w-md mx-auto pt-2  md:pt-4">
-          <Link
+          <button
             className="block text-blue-500 hover:text-blue-800 hover:bg-gray-100"
-          to="/category"
+          onClick={()=>{navigate("/category"),{replace: true}}}
           >
-            create categories and expenses
-          </Link>
+            view categories
+          </button>
+          <button
+            className="block text-blue-500 hover:text-blue-800 hover:bg-gray-100"
+          onClick={()=>{navigate("/expense"),{replace: true}}}
+          >
+            create expenses
+          </button>
         </div>
       </div>
       <div className='pt-4 grid grid-cols-1 md:grid-cols-2 gap-1'>

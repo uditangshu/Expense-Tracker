@@ -61,6 +61,7 @@ export const categoriesRouter = new Hono<{
     const prisma = new PrismaClient({
          datasourceUrl: c.env.DATABASE_URL,
        }).$extends(withAccelerate())
+       const userId= c.get("userId")
   
     const categories = await prisma.category.findMany();
     return c.json(categories);

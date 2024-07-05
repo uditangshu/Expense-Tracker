@@ -5,7 +5,9 @@ import Category from './pages/Category';
 import Signin from './pages/Signin';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
-import { Expenses } from './dynamicExpenses.jsx/Expenses';
+import { Expenses } from './dynamicExpenses/Expenses';
+import { Expense }from './pages/Expense';
+
 
 function App() {
   
@@ -17,6 +19,7 @@ function App() {
         <Route path="/signup" element={<Signup/>} />
         <Route path ="/"element={<Home/>}></Route>
         <Route path ="/expenses/:catId"element={<Expenses/>}></Route>
+        <Route path ="/expense" element={<Expense/>}></Route>
       </Routes>
     </BrowserRouter>
   )
