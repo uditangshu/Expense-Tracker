@@ -1,1 +1,1 @@
-export const DB_URL="http://127.0.0.1:8787"
+export const DB_URL="https://backend.server-uditangshu-2004.workers.dev"
