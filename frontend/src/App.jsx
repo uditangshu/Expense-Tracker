@@ -3,7 +3,7 @@ import './App.css';
 import { BrowserRouter, Route,Router, Routes } from 'react-router-dom';
 import Category from './pages/Category';
 import Signin from './pages/Signin';
-import Signup from './pages/Signup';
+import {Signup} from './pages/Signup';
 import Home from './pages/Home';
 import { Expenses } from './dynamicExpenses/Expenses';
 import { Expense }from './pages/Expense';

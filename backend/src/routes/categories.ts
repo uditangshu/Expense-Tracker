@@ -11,7 +11,7 @@ export const categoriesRouter = new Hono<{
     },
     Variables:
     {
-      userId: any
+      userId: any,
     }
   }>();
 
@@ -103,15 +103,65 @@ categoriesRouter.put('/:id', async (c) => {
 });
 
 categoriesRouter.delete('/:id', async (c) => {
-  const id= c.req.param("id");
-
+  const id = c.req.param("id");
+  const userId = c.get("userId")
+  if (!id || isNaN(Number(id))) {
+    return c.json({ message: 'Invalid ID' }, 400);
+  }
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate())
 
-  await prisma.category.delete({ 
-    where: { 
-      id: Number(id)
-    } });
+  const cat = await prisma.category.findUnique({
+    where:{
+     id : Number(id)
+    }
+  })
+  if(!cat)
+    {
+      return c.json({
+        message: "Category does not exist"
+      })
+    }
+
+ 
+  const expenses = await prisma.expense.findMany({
+    where: {
+      category: cat.name
+    }
+  });
+  const totalBalance = expenses.reduce((acc, expense) => acc + expense.balance, 0);
+
+  
+  await prisma.user.update({
+    where: {
+      id: userId
+    },
+    data: {
+      balance: {
+        increment: totalBalance
+      }
+    }
+  });
+
+
+  await prisma.expense.deleteMany({
+    where:{
+      category : cat.name
+    }
+  })
+
+  try{
+    await prisma.category.delete({ 
+      where: { 
+        id: Number(id)
+      }
+    })
+  }catch(e: any)
+  {
+    return c.json({
+      message: e.error
+    })
+  };
   return c.json({ message: 'Category deleted' });
 });

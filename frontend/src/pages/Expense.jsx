@@ -35,19 +35,18 @@ export const Expense = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${DB_URL}/api/v1/expenses`, {
+      const response = await fetch(`${DB_URL}/api/v1/expenses/create-expense`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json',
         'Authorization': `${localStorage.getItem('jwtToken')}`
          },
         body: JSON.stringify({ balance: amount,description: description,category: category }),
       });
-      const data = await response.json();
-      console.log(body);
       
       setAmount('');
       setDescription('');
       setCategory('');
+      navigate('/');
     } catch (error) {
       console.error(error);
     }
@@ -65,7 +64,7 @@ export const Expense = () => {
         body: JSON.stringify({ name: newCategory }),
       });
       const data = await response.json();
-      console.log(data);
+      
       setCategories([...categories, data]); 
       setNewCategory('');
       setShowCreateCategory(false); 
@@ -127,7 +126,7 @@ export const Expense = () => {
               className="w-full p-2 pl-10 text-sm text-gray-700"
             >
               <option value="">Select a category</option>
-              {Array.isArray(categories) && categories.map((category,index) => (
+              {Array.isArray(categories) && categories.map((category, index) => (
                 <option key={index} value={category.name}>
                   {category.name}
                 </option>

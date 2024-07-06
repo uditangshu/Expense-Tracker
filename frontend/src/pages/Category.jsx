@@ -78,6 +78,8 @@ function Category() {
           }
          });
       setCategories(categories.filter(category => category.id!== id));
+      const data = await response.json();
+      alert(data);
     } catch (e) {
       console.log(e);
     }

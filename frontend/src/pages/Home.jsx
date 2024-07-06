@@ -127,13 +127,13 @@ function Home() {
         </div>
         <div className="max-w-md mx-auto pt-2  md:pt-4">
           <button
-            className="block text-blue-500 hover:text-blue-800 hover:bg-gray-100"
+            className="block bg-blue-500 hover:bg-blue-800 text-white rounded p-2 mb-2 font-semibold"
           onClick={()=>{navigate("/category"),{replace: true}}}
           >
             view categories
           </button>
           <button
-            className="block text-blue-500 hover:text-blue-800 hover:bg-gray-100"
+            className="block bg-blue-500 hover:bg-blue-800 text-white rounded p-2 font-semibold"
           onClick={()=>{navigate("/expense"),{replace: true}}}
           >
             create expenses

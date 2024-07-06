@@ -2,7 +2,7 @@ import React, { useState} from 'react';
 import {useNavigate} from "react-router-dom"
 import { DB_URL } from '../DB_URL';
 
-function Signup() {
+export function Signup() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,9 +23,7 @@ function Signup() {
         body: JSON.stringify(userData),
       });
 
-      const data = await response.json();
-      console.log(data)
-      
+      const data = await response.json(); 
       if (response.ok)
         {
         localStorage.setItem('jwtToken', data.jwtToken);
@@ -142,4 +140,3 @@ function Signup() {
     </div>
   );
 }
-export default Signup;
