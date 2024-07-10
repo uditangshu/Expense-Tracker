@@ -13,7 +13,6 @@ export function Expenses() {
   }, []);
 
   const fetchExpenses = async (e) => {
-    e.preventDefault();
     try {
       const response = await fetch(`${DB_URL}/api/v1/expenses/all-expenses`,{
         method: "GET",

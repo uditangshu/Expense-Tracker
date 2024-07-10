@@ -28,7 +28,7 @@ function Category() {
       }
     };
     fetchData();
-  }, [],2000);
+  }, []);
 
   const handleCreateCategory = async () => {
     try {

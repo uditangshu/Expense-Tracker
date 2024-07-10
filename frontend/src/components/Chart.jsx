@@ -1,13 +1,37 @@
 // BarChart.js
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { DB_URL } from '../DB_URL';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
+
+
 const BarChart = () => {
-  const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  const [categories,setCategories] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${DB_URL}/api/v1/categories`, {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${localStorage.getItem('jwtToken')}`
+          }
+        });
+        const dataCat = await response.json();
+        setCategories(dataCat);
+  
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchData();
+  }, []);
+  
+  const data= {
+    labels:categories,
     datasets: [
       {
         label: 'Sales',

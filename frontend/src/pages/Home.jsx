@@ -146,8 +146,8 @@ function Home() {
            <h1 className='text-2xl font-semibold py-4 flex justify-center shadow-md h-16'>Recent transactions</h1>
           {expenses.slice(-5).map((expense, index) => (
             <div key={index} className="bg-white shadow-md rounded p-4">
-              <h3 className="text-lg font-bold">{expense.description}</h3>
-              <p className="text-lg font-bold">category: {expense.category}</p>
+              <p className="text-xl font-bold">Category: {expense.category}</p>
+              <h3 className="text-lg font-semibold">Title:{expense.description}</h3>
               <p className="text-lg font-bold text-red-600">${expense.balance}</p>
             </div>
           ))}
